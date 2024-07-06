@@ -2,7 +2,7 @@
   "name": "SabAPIS",
   "version": "1.0.0",
   "description": "Sab-Apis por Victor Gabriel. Inicialmente o projeto de design e arquitetura da api foi desenvolvido por Josival e seus amigos. Por mim, foi adicionado +300 apis novas! Obrigado..",
-  "main": "api.js",
+  "main": "jrpc.js",
   "scripts": {
     "start": "node jrpc.js",
     "test": "echo \"Error: no test specified\" && exit 1"
