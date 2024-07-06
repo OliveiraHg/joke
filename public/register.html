@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+
+<html lang="en" :class="{ 'dark': dark }" x-data="data" id="html" class="dark">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="NEXUS API REST - LOGIN">
+
+    <meta property="og:description" content="A tecnologia move o mundo, NEXUS API REST - LOGIN está junto.">
+
+    <meta property="og:image" content='https://telegra.ph/file/d9ff95e4db542069612c0.jpg'>
+
+    <meta name="csrf-token" content="6LclkvcpAAAAAIoATPVpPidxpRNM9ZVn8O-eRNb0">
+
+    <title>NEXUS API REST - LOGIN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://blikerhost.cloud/css/app.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+    <style>
+
+        [x-cloak] { display: none !important; }
+
+    </style>
+
+    <script>
+
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches && !window.localStorage.getItem('dark')) {
+
+            document.documentElement.classList.add("dark");
+
+        }
+
+    </script>
+
+    <script defer src="https://blikerhost.cloud/js/app.js"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</head>
+
+<body class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900 dark:text-gray-300 text-gray-700">
+
+    <div class="max-w-4xl flex-1 mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+
+        <div class="flex flex-col overflow-y-auto md:flex-row">
+
+            <div class="h-32 md:h-auto md:w-1/2">
+
+                <img aria-hidden="true" class="object-cover w-full h-full" src="https://telegra.ph/file/d9ff95e4db542069612c0.jpg" alt="NEXUS API REST - LOGIN Logo" />
+
+            </div>
+
+            <div class="md:w-1/2 p-6 sm:p-12">
+
+                <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Registrar</h1>
+
+                <form id="loginForm">
+
+                    <input type="hidden" name="_token" value="6LclkvcpAAAAAIoATPVpPidxpRNM9ZVn8O-eRNb0">
+
+                    <label class="block text-sm mb-4">
+
+                        <span class="text-gray-700 dark:text-gray-400">Username</span>
+
+                        <input type="text" name="username" id="username" required autofocus class="block w-full mt-1 text-sm dark:bg-gray-700 dark:text-gray-300 rounded-md shadow-sm dark:border-gray-600 focus:ring focus:ring-indigo-200 focus:border-purple-400 focus:outline-none">
+
+                    </label>
+
+                    <label class="block text-sm mb-4">
+
+                        <span class="text-gray-700 dark:text-gray-400">Email</span>
+
+                        <input type="email" name="email" id="email" required class="block w-full mt-1 text-sm dark:bg-gray-700 dark:text-gray-300 rounded-md shadow-sm dark:border-gray-600 focus:ring focus:ring-indigo-200 focus:border-purple-400 focus:outline-none">
+
+                    </label>
+
+                    <label class="block text-sm mb-4">
+
+                        <span class="text-gray-700 dark:text-gray-400">Senha</span>
+
+                        <input type="password" name="password" id="senha" required minlength="8" class="block w-full mt-1 text-sm dark:bg-gray-700 dark:text-gray-300 rounded-md shadow-sm dark:border-gray-600 focus:ring focus:ring-indigo-200 focus:border-purple-400 focus:outline-none">
+
+                    </label>
+
+                    <label class="block text-sm mb-4">
+
+                        <span class="text-gray-700 dark:text-gray-400">Confirma senha</span>
+
+                        <input type="password" name="confirm_password" id="confirm" required class="block w-full mt-1 text-sm dark:bg-gray-700 dark:text-gray-300 rounded-md shadow-sm dark:border-gray-600 focus:ring focus:ring-indigo-200 focus:border-purple-400 focus:outline-none">
+
+                    </label>
+
+                    <label class="inline-flex items-center mb-4">
+
+                        <input id="remember_me" type="checkbox" name="remember" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+
+                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+
+                    </label>
+
+                    <div class="mb-4">
+
+                        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-size="normal" data-theme="dark" id="recaptcha-element"></div>
+
+                    </div>
+
+                    <button type="button" class="block w-full px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" onclick="verificar()">Registrar</button>
+
+                </form>
+
+                <hr class="my-8">
+
+                <div class="flex justify-between">
+
+                    <a href="#" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline">Forgot your password?</a>
+
+                    <a href="login-up" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline">Fazer login</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+
+        function verificar() {
+
+            const recaptchaResponse = grecaptcha.getResponse();
+
+            if (!recaptchaResponse) {
+
+                Swal.fire({
+
+                    title: 'Erro',
+
+                    text: 'Por favor, verifique o reCAPTCHA.',
+
+                    icon: 'error'
+
+                });
+
+            } else {
+
+                registrar();
+
+            }
+
+        }
+
+        function teste(username, senha, email) {
+
+            fetch(`/registerjson?username=${username}&senha=${senha}&email=${email}`)
+
+                .then(response => response.json())
+
+                .then(data => {
+
+                    Swal.fire({
+
+                        icon: data.message.includes("sucesso") ? 'success' : 'error',
+
+                        title: data.message.includes("sucesso") ? 'Usuário registrado com sucesso!' : 'Erro ao registrar usuário',
+
+                        text: data.message
+
+                    });
+
+                    if (data.message.includes("sucesso")) {
+
+                        setTimeout(() => window.location.href = "login-up", 2000);
+
+                    }
+
+                })
+
+                .catch(error => Swal.fire({
+
+                    icon: 'error',
+
+                    title: 'Erro',
+
+                    text: 'Erro ao fazer solicitação para registrar usuário: ' + error.message
+
+                }));
+
+        }
+
+        function registrar() {
+
+            const username = document.getElementById("username").value.trim();
+
+            const senha = document.getElementById("senha").value.trim();
+
+            const confirm = document.getElementById("confirm").value.trim();
+
+            const email = document.getElementById("email").value.trim();
+
+            if (!username || !email) {
+
+                Swal.fire({
+
+                    icon: 'error',
+
+                    title: 'Erro',
+
+                    text: 'Todos os campos são obrigatórios.'
+
+                });
+
+                return;
+
+            }
+
+            if (senha.length < 8) {
+
+                Swal.fire({
+
+                    icon: 'error',
+
+                    title: 'Erro',
+
+                    text: 'A senha deve ter pelo menos 8 caracteres.'
+
+                });
+
+                return;
+
+            }
+
+            if (senha !== confirm) {
+
+                Swal.fire({
+
+                    icon: 'error',
+
+                    title: 'Erro',
+
+                    text: 'As senhas não coincidem.'
+
+                });
+
+                return;
+
+            }
+
+            teste(username, senha, email);
+
+        }
+
+    </script>
+
+</body>
+
+</html>

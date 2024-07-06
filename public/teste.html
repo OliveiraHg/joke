@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Número</title>
+    <style>
+        /* Adicionar estilo básico */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; }
+        input, button { padding: 10px; margin: 5px 0; }
+        #responseMessage { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Verificação de Número</h1>
+    <form id="requestCodeForm">
+        <label for="phoneNumber">Número de Telefone:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" required>
+        <button type="submit">Enviar Código</button>
+    </form>
+
+    <form id="verifyCodeForm" style="display:none;">
+        <label for="verificationCode">Código de Verificação:</label>
+        <input type="text" id="verificationCode" name="verificationCode" required>
+        <button type="submit">Verificar Código</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById("requestCodeForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            try {
+                const response = await fetch(`/gerar-codigo?numero=${phoneNumber}`);
+                const data = await response.json();
+                if (data.error) {
+                    Swal.fire('Erro', data.error, 'error');
+                } else {
+                    Swal.fire('Sucesso', `Código de confirmação enviado para ${phoneNumber}.`, 'success');
+                    document.getElementById("requestCodeForm").style.display = "none";
+                    document.getElementById("verifyCodeForm").style.display = "block";
+                }
+            } catch (error) {
+                console.error("Erro ao enviar código de confirmação:", error);
+            }
+        });
+
+        document.getElementById("verifyCodeForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const verificationCode = document.getElementById("verificationCode").value;
+            try {
+                const response = await fetch(`/verificar-codigo?numero=${phoneNumber}&codigo=${verificationCode}`);
+                const data = await response.json();
+                if (data.error) {
+                    Swal.fire('Erro', data.error, 'error');
+                } else {
+                	                const response2 = await fetch(`del?numero=${phoneNumber}`);
+                    Swal.fire('Sucesso', data.message, 'success');
+                    
+                }
+            } catch (error) {
+                console.error("Erro ao verificar código de confirmação:", error);
+            }
+        });
+    </script>
+</body>
+</html>

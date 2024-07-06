@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Admin</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <!-- Bulma CSS framework -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css"/>
+
+    <!-- SweetAlert2 for beautiful alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+            text-decoration-color: red;
+            
+        }
+        .light-mode {
+            background-color: #f5f5f5;
+            color: #121212;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+            height: 200%;
+        }
+        .dark-mode .container {
+            background-color: #333;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            width: 100%;
+            max-width: 400px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #00d1b2;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #00b89c;
+        }
+        .toggle-theme {
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        tudor {
+          box-shadow: 0 5px 15px rgba(0,0,0,0,3)
+          padding-top: 5px;
+         
+        }
+    </style>
+    
+</head>
+<body class="light-mode">
+  <div id="tudor">
+            <h1 style="text-align: center; font-size: 40px;" class="title is-3">Painel de Admin</h1>
+  
+    <div class="container animate__animated animate__fadeIn">
+
+        
+        <div class="toggle-theme" onclick="toggleTheme()">
+            <i class="fas fa-adjust"></i> Alternar Tema
+        </div>
+        
+        <div class="form-container">
+            <h2 class="subtitle is-5">Adicionar API Key</h2>
+            <input type="text" id="apikey" class="input" placeholder="API Key">
+            <input type="number" id="rq" class="input" placeholder="Número de Requisições">
+            
+            <button class="button is-primary" onclick="addKey()">Adicionar</button>
+        </div>
+        <div class="form-container">
+            <h2 class="subtitle is-5">Excluir API Key</h2>
+            <input type="text" id="apikeydel" class="input" placeholder="API Key">
+
+            <button class="button is-danger" onclick="delKey()">Excluir</button>
+        </div>
+
+        <!-- Lista de API Keys -->
+        <div class="form-container">
+            <h2 class="subtitle is-5">Lista de API Keys</h2>
+            <button class="button is-info" onclick="listApiKeys()">Listar API Keys</button>
+            <ul id="apikey-list"></ul>
+        </div>
+
+        <!-- Lista de Admins -->
+        <div class="form-container">
+            <h2 class="subtitle is-5">Lista de Admins</h2>
+            <button class="button is-info" onclick="listAdmins()">Listar Admins</button>
+            <ul id="admin-list"></ul>
+        </div>
+
+        <!-- Adicionar Nov o Admin -->
+        <div class="form-container">
+            <h2 class="subtitle is-5">Adicionar Novo Admin</h2>
+            <input type="text" id="adminuser" class="input" placeholder="Novo Admin">
+            <input type="password" id="adminsenha" class="input" placeholder="Senha do Novo Admin">
+            	            <input type="text" id="adminemail" class="input" placeholder="E-mail do novo admin">
+            	
+            <button class="button is-success" onclick="addAdmin()">Adicionar Admin</button>
+        </div>
+
+        <!-- Excluir Admin -->
+        <div class="form-container">
+            <h2 class="subtitle is-5">Excluir Admin</h2>
+            <input type="text" id="userdel" class="input" placeholder="Admin a ser Excluído">
+            <input type="password" id="senhasub" class="input" placeholder="Senha de Admin">
+            <button class="button is-danger" onclick="delAdmin()">Excluir Admin</button>
+        </div>
+
+        <!-- Tempo Online -->
+        <div class="form-container">
+            <h2 class="subtitle is-5">Tempo Online</h2>
+            <p id="uptimeinfo">Tempo online: 0 minutos</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
+           
+        }
+
+function addKey() {
+    // Parâmetros da nova chave de API
+    const apikeyadd = document.getElementById('apikey').value
+    const senhaadd = 'nexussub.ofc';
+    const rqadd = document.getElementById('rq').value
+
+    // URL da rota de adição de chave de API
+    const url = `/api/add-key?apikey=${apikeyadd}&senha=${senhaadd}&rq=${rqadd}`;
+
+    // Enviar solicitação GET para adicionar uma nova chave de API
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Verificar a resposta
+            if (data.resultado.includes("✅")) {
+                // Se a chave de API foi adicionada com sucesso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Nova chave de API adicionada com sucesso!',
+                    text: data.resultado,
+                });
+            } else {
+                // Se houve algum erro ao adicionar a chave de API
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao adicionar nova chave de API',
+                    text: data.resultado,
+                });
+            }
+        })
+        .catch(error => {
+            // Se houve um erro na solicitação
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao fazer solicitação',
+                text: 'Erro ao fazer solicitação para adicionar nova chave de API: ' + error.message,
+            });
+        });
+}
+
+// Chamar a função para adicionar uma nova chave de API
+
+
+function delKey() {
+    // Parâmetros para excluir a chave de API
+    const apikey = document.getElementById('apikeydel').value;
+    const senha = 'nexussub.ofc';
+
+    // URL da rota de exclusão de chave de API
+    const url = `/api/delete-key?apikey=${apikey}&senha=${senha}`;
+
+    // Enviar solicitação GET para excluir a chave de API
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Verificar a resposta
+            if (data.resultado.includes("✅")) {
+                // Se a chave de API foi excluída com sucesso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Chave de API excluída com sucesso!',
+                    text: data.resultado,
+                });
+            } else {
+                // Se houve algum erro ao excluir a chave de API
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao excluir a chave de API',
+                    text: data.resultado,
+                });
+            }
+        })
+        .catch(error => {
+            // Se houve um erro na solicitação
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao fazer solicitação',
+                text: 'Erro ao fazer solicitação para excluir a chave de API: ' + error.message,
+            });
+        });
+}
+
+        function listApiKeys() {
+    // Parâmetros da solicitação
+    const senha = 'nexussub.ofc';
+
+    // URL da rota para obter a lista de chaves de API
+    const url = `/api/apikeys?senha=${senha}`;
+
+    // Enviar solicitação GET para obter a lista de chaves de API
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Verificar a resposta
+            if (data.resultado.includes("✅")) {
+                // Se a lista de chaves de API foi obtida com sucesso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Lista de chaves de API obtida com sucesso!',
+                    html: `<pre>${JSON.stringify(data.keys, null, 2)}</pre>`,
+                });
+            } else {
+                // Se houve algum erro ao obter a lista de chaves de API
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao obter lista de chaves de API',
+                    text: data.resultado,
+                });
+            }
+        })
+        .catch(error => {
+            // Se houve um erro na solicitação
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao fazer solicitação',
+                text: 'Erro ao fazer solicitação para obter lista de chaves de API: ' + error.message,
+            });
+        });
+
+        }
+
+        function listAdmins() {
+  // Parâmetro de senha
+const senha = 'nexussub.ofc'; // Altere para a senha desejada
+
+// URL da rota /listadmins com o parâmetro de senha
+const url = `/listadmins?senha=${senha}`;
+
+// Fazendo a solicitação para a rota /listadmins
+fetch(url)
+    .then(response => {
+        // Verificando se a resposta é bem-sucedida (status 200)
+        if (!response.ok) {
+            throw new Error('Erro ao obter os admins');
+        }
+        // Convertendo a resposta para JSON
+        return response.json();
+    })
+    .then(data => {
+        // Exibindo a resposta em um popup Swal
+        Swal.fire({
+            title: 'Admins',
+            html: formatAdmins(data),
+            icon: 'info',
+            confirmButtonText: 'Fechar'
+        });
+    })
+    .catch(error => {
+        // Exibindo mensagem de erro em caso de falha na solicitação
+        Swal.fire({
+            title: 'Erro',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Fechar'
+        });
+    });
+
+// Função para formatar os dados dos admins
+function formatAdmins(admins) {
+    let formattedText = '<ul>';
+    for (const admin of admins) {
+        formattedText += `<li>User: ${admin.user}, Email: ${admin.email}</li>`;
+    }
+    formattedText += '</ul>';
+    return formattedText;
+}
+    
+        }
+
+        function addAdmin() {
+    const senha = "nexussub.ofc"
+    const adminemail = document.getElementById('adminemail').value;
+    const adminsenha = document.getElementById('adminsenha').value;
+    const adminuser = document.getElementById('adminuser').value;
+
+    fetch(`/addAdmin?senha=${senha}&adminemail=${adminemail}&adminsenha=${adminsenha}&adminuser=${adminuser}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.result.includes('✅')) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Novo admin adicionado com sucesso!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao adicionar novo admin',
+                    text: data.result,
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao enviar solicitação',
+                text: error.message
+            });
+        });
+
+        }
+
+        function delAdmin() {
+            // Implementação para excluir um Admin
+            
+    const senha = document.getElementById('senhasub').value
+    const username = document.getElementById('userdel').value
+
+    fetch(`/deleteAdmin?senha=${senha}&username=${username}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.result.includes("✅")) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Admin excluído com sucesso!',
+                    text: 'O admin foi removido com sucesso.',
+                    timer: 5000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao excluir admin',
+                    text: data.result,
+                    timer: 5000,
+                    showConfirmButton: false
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao excluir admin',
+                text: 'Erro ao enviar solicitação para excluir admin: ' + error.message,
+                timer: 5000,
+                showConfirmButton: false
+            });
+        });
+}
+        
+        
+    </script>
+    <script>
+    // Função para fazer a solicitação fetch e atualizar o conteúdo da página
+    function fetchUptime() {
+        fetch('/uptime')
+            .then(response => response.json())
+            .then(data => {
+                // Formatando os dados recebidos
+                const uptimeInfo = `${data.days} dias, ${data.hours} horas, ${data.minutes} minutos e ${data.seconds} segundos`;
+
+                // Atualizando o conteúdo da página com as informações de tempo online do servidor
+                document.getElementById('uptimeInfo').textContent = uptimeInfo;
+            })
+            .catch(error => {
+                console.error('Erro ao obter tempo online do servidor:', error);
+                // Exibindo uma mensagem de erro na página, se necessário
+                document.getElementById('uptimeInfo').textContent = 'Erro ao obter tempo online do servidor';
+            });
+    }
+
+    // Chama a função fetchUptime assim que a página é carregada
+    window.onload = fetchUptime;
+</script>
+    </div>
+</body>
+</html>

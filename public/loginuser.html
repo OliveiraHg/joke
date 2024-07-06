@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark': dark }" x-data="data" lang="en" id="html" class="dark">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta content="NEXUS API REST - LOGIN" property="og:title">
+
+    <meta content="A tecnologia move o mundo, NEXUS API REST - LOGIN tรก junto." property="og:description">
+
+    <meta content='https://telegra.ph/file/d9ff95e4db542069612c0.jpg' property="og:image">
+
+    <meta name="csrf-token" content="6LclkvcpAAAAAIoATPVpPidxpRNM9ZVn8O-eRNb0">
+
+    <title>NEXUS API REST - LOGIN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://blikerhost.cloud/css/app.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+    <style>
+
+        [x-cloak] { display: none !important; }
+
+    </style>
+
+    <script>
+
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+        if (prefersDarkScheme.matches && !window.localStorage.getItem('dark') && "dark" == "") {
+
+            document.querySelector("html").classList.add("dark");
+
+        }
+
+    </script>
+
+    <script defer src="https://blikerhost.cloud/js/app.js"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</head>
+
+<body>
+
+    <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900 dark:text-gray-300 text-gray-700">
+
+        <div class="max-w-4xl flex-1 h-full mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+
+            <div class="flex flex-col overflow-y-auto md:flex-row">
+
+                <div class="h-32 md:h-auto md:w-1/2">
+
+                    <img aria-hidden="true" class="object-cover w-full h-full" src="https://telegra.ph/file/d9ff95e4db542069612c0.jpg" alt="NEXUS API REST - LOGIN Logo" />
+
+                </div>
+
+                <div class="md:w-1/2">
+
+                    <div class="w-full p-6 sm:p-12">
+
+                        <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Entrar</h1>
+
+                        <form id="loginForm">
+
+                            <input type="hidden" name="_token" value="6LclkvcpAAAAAIoATPVpPidxpRNM9ZVn8O-eRNb0">
+
+                            <label class="block text-sm">
+
+                                <span class="text-gray-700 dark:text-gray-400">Username</span>
+
+                                <input type="text" name="username" class="block w-full text-sm dark:border-gray-600 mt-1 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray rounded-md shadow-sm border-gray-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required autofocus id="username">
+
+                            </label>
+
+                            <label class="block mt-4 text-sm">
+
+                                <span class="text-gray-700 dark:text-gray-400">Senha</span>
+
+                                <input type="password" name="password" class="block w-full text-sm dark:border-gray-600 mt-1 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray rounded-md shadow-sm border-gray-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required autocomplete="current-password" id="senha">
+
+                            </label>
+
+                            <div class="block mt-4">
+
+                                <label for="remember_me" class="inline-flex items-center">
+
+                                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
+
+                                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+
+                                </label>
+
+                            </div>
+
+                            <div class="block mt-4">
+
+                                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-size="normal" data-theme="dark" id="recaptcha-element"></div>
+
+                            </div>
+
+                            <button type="button" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" onclick="verificar()">Login</button>
+
+                        </form>
+
+                        <hr class="my-8">
+
+                        <div class="flex justify-between mt-4">
+
+                            <p>
+
+                                <a href="#" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline">esqueceu a senha?</a>
+
+                            </p>
+
+                            <p>
+
+                                <a href="rg" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline">Criar conta</a>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+
+        function verificar() {
+
+            const recaptchaResponse = grecaptcha.getResponse();
+
+            if (!recaptchaResponse) {
+
+                swal.fire({
+
+                    title: 'Erro',
+
+                    text: 'Por favor, verifique o reCAPTCHA.',
+
+                    icon: 'error'
+
+                });
+
+                return;
+
+            }
+
+            login();
+
+        }
+
+        function login() {
+
+            const username = document.getElementById('username').value;
+
+            const senha = document.getElementById('senha').value;
+
+            fetch(`/loginuserjson?username=${encodeURIComponent(username)}&senha=${encodeURIComponent(senha)}`)
+
+                .then(response => response.json())
+
+                .then(data => {
+
+                    if (data.userID) {
+
+                        document.cookie = `userID=${data.userID}`;
+
+                        swal.fire({
+
+                            icon: 'success',
+
+                            title: 'Login bem-sucedido!',
+
+                            text: 'Redirecionando para a página de dashboard...',
+
+                            timer: 2000,
+
+                            showConfirmButton: false
+
+                        }).then(() => {
+
+                            window.location.href = '/dash';
+
+                        });
+
+                    } else {
+
+                        swal.fire({
+
+                            icon: 'error',
+
+                            title: 'Erro ao fazer login',
+
+                            text: data.error || 'Erro desconhecido'
+
+                        });
+
+                    }
+
+                })
+
+                .catch(error => {
+
+                    console.error('Erro ao fazer login:', error);
+
+                    swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Erro ao fazer login',
+
+                        text: 'Erro ao fazer login. Por favor, tente novamente mais tarde.'
+
+                    });
+
+                });
+
+        }
+
+    </script>
+
+</body>
+
+</html>
